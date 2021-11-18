@@ -5542,9 +5542,11 @@ async function dockerBuild(tag, args) {
     if (target.length > 0) {
         commands.push('echo "::group::Install Rust target"', `if [[ ! -d $(rustc --print target-libdir --target ${target}) ]]; then rustup target add ${target}; fi`, 'echo "::endgroup::"');
     }
+    commands.push(core.getInput('extra-build-command'));
     commands.push(`maturin ${args.join(' ')}`);
     const workspace = process.env.GITHUB_WORKSPACE;
     const scriptPath = external_path_.join(workspace, 'run-maturin-action.sh');
+    process.stdout.write(commands.join('\n'));
     (0,external_fs_.writeFileSync)(scriptPath, commands.join('\n'));
     await external_fs_.promises.chmod(scriptPath, 0o755);
     return await exec.exec('docker', [

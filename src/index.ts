@@ -272,11 +272,15 @@ async function dockerBuild(tag: string, args: string[]): Promise<number> {
       'echo "::endgroup::"'
     )
   }
+
+  commands.push(core.getInput('extra-build-command'))
+
   commands.push(`maturin ${args.join(' ')}`)
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const workspace = process.env.GITHUB_WORKSPACE!
   const scriptPath = path.join(workspace, 'run-maturin-action.sh')
+  process.stdout.write(commands.join('\n'))
   writeFileSync(scriptPath, commands.join('\n'))
   await fs.chmod(scriptPath, 0o755)
 

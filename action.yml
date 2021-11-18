@@ -26,6 +26,10 @@ inputs:
       Rust toolchain name.
       See https://rust-lang.github.io/rustup/concepts/toolchains.html#toolchain-specification
     required: false
+  extra-build-command:
+    description: |
+      For anylinux docker builds, run this command on the docker image before maturin is run. Can be useful to add build tools that are not in the container already.
+    required: false
 
 runs:
   using: 'node12'
